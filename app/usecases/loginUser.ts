@@ -28,7 +28,7 @@ export async function loginUser(
     }
         
     const data = await response.json();
-    console.log("Response data:", data);
+   // console.log("Response data:", data);
     const jwtToken = data.token;
 
     await storeToken(jwtToken);

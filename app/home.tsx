@@ -30,11 +30,9 @@ export default function Home() {
       const token = await getToken();
       const isLoggedIn = token == null ? false : true;
 
-      if (isLoggedIn) {
-        router.replace("/home");
-      } else {
+      if (!isLoggedIn) {
         router.replace("/login");
-      }
+      } 
     };
     checkLoggedState();
   }, []);
