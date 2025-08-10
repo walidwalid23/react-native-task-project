@@ -2,6 +2,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import {
@@ -20,15 +21,13 @@ import IconTextButton from "./components/IconTextButton";
 import SectionHeader from "./components/SectionHeader";
 import Wallet from "./components/Wallet";
 import { colors, fontSizes, margins, paddings, sizes } from "./styles";
-import { deleteToken, getToken } from "./usecases/token_store";
 
 export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
     const checkLoggedState = async () => {
-      const token = await getToken();
-      const isLoggedIn = token == null ? false : true;
+      const isLoggedIn = await AsyncStorage.getItem('loggedIn');
 
       if (!isLoggedIn) {
         router.replace("/login");
@@ -107,7 +106,7 @@ export default function Home() {
                   justifyContent: "center",
                 }}
                 onPress={async () => {
-                  await deleteToken();
+                  await AsyncStorage.removeItem('loggedIn');
                   router.replace("/login");
                   console.log("logged out");
                 }}

@@ -1,15 +1,15 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
-import { getToken } from "./usecases/token_store";
 
 export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      const token = await getToken();
-      const isLoggedIn = token == null ? false : true;
+ 
+      const isLoggedIn = await AsyncStorage.getItem('loggedIn');
 
       if (isLoggedIn) {
         router.replace("/home");

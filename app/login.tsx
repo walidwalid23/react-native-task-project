@@ -1,21 +1,22 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import {
-    ActivityIndicator,
-    Image,
-    SafeAreaView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Controller, useForm } from "react-hook-form";
+import { ActivityIndicator, SafeAreaView, Text, View } from "react-native";
+import Button from "./components/atoms/Button";
+import Logo from "./components/atoms/Logo";
+import TextField from "./components/atoms/TextField";
 import { loginUser } from "./usecases/loginUser";
+import { loginUserWithBiometrics } from "./usecases/LoginUserWithBiometrics";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [isFailure, setIsFailure] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const router = useRouter();
 
   return (
@@ -28,52 +29,81 @@ export default function Login() {
         alignItems: "center",
       }}
     >
-      <Image
-        source={require("../assets/images/appbar_logo.png")}
-        style={{ width: 250, height: 113 }}
-      />
+      <Logo width={251.61} height={113.22} />
       <View style={{ height: 32 }} />
-      <TextInput
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-        placeholderTextColor="#abaaaaff"
-        style={{
-          backgroundColor: "#4D4D4D",
-          width: "100%",
-          borderRadius: 8,
-          color: "white",
+      <Controller
+        control={control}
+        rules={{
+          required: "Username field is required",
+          minLength: {
+            value: 2,
+            message: "Username must be atleast 2 characters.",
+          },
+        }}
+        name="username"
+        render={({ field: { onChange, value } }) => {
+          return (
+            <TextField
+              placeholder="Username"
+              value={value}
+              onChangeText={onChange}
+              secureText={false}
+            />
+          );
         }}
       />
+
+      {typeof errors.username?.message === "string" ? (
+        <Text style={{ color: "red" }}>{errors.username.message}</Text>
+      ) : null}
+
       <View style={{ height: 16 }} />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        placeholderTextColor="#abaaaaff"
-        style={{
-          backgroundColor: "#4D4D4D",
-          borderRadius: 8,
-          width: "100%",
-          color: "white",
+      <Controller
+        control={control}
+        rules={{
+          required: "Password field is required",
+          minLength: {
+            value: 3,
+            message: "Password must be atleast 3 characters.",
+          },
         }}
+        name="password"
+        render={({ field: { onChange, value } }) => {
+          return (
+            <TextField
+              placeholder="Password"
+              value={value}
+              onChangeText={onChange}
+              secureText={true}
+            />
+          );
+        }}
+      />
+      {typeof errors.password?.message === "string" ? (
+        <Text style={{ color: "red" }}>{errors.password.message}</Text>
+      ) : null}
+
+      <View style={{ height: 24 }} />
+      <Button
+        buttonText="Login"
+        onPress={handleSubmit((data) => {
+          loginUser(
+            data.username,
+            data.password,
+            setIsFailure,
+            setIsLoading,
+            router
+          );
+        })}
       />
       <View style={{ height: 24 }} />
-      <TouchableOpacity
+      <Button
+        buttonText="Login with biometric"
         onPress={() => {
-          loginUser(username, password, setIsFailure, setIsLoading, router);
+          loginUserWithBiometrics(setIsFailure, setIsLoading, router);
         }}
-        style={{
-          borderRadius: 2222,
-          backgroundColor: "#D6D3FF",
-          width: "100%",
-          height: 40,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text>Login</Text>
-      </TouchableOpacity>
+      />
+
       {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
       {isFailure ? (
         <Text style={{ fontSize: 24, fontWeight: "bold", color: "red" }}>
