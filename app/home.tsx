@@ -27,11 +27,11 @@ export default function Home() {
 
   useEffect(() => {
     const checkLoggedState = async () => {
-      const isLoggedIn = await AsyncStorage.getItem('loggedIn');
+      const isLoggedIn = await AsyncStorage.getItem("loggedIn");
 
       if (!isLoggedIn) {
         router.replace("/login");
-      } 
+      }
     };
     checkLoggedState();
   }, []);
@@ -106,7 +106,7 @@ export default function Home() {
                   justifyContent: "center",
                 }}
                 onPress={async () => {
-                  await AsyncStorage.removeItem('loggedIn');
+                  await AsyncStorage.removeItem("loggedIn");
                   router.replace("/login");
                   console.log("logged out");
                 }}

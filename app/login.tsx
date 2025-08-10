@@ -2,9 +2,9 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ActivityIndicator, SafeAreaView, Text, View } from "react-native";
-import Button from "./components/atoms/Button";
-import Logo from "./components/atoms/Logo";
-import TextField from "./components/atoms/TextField";
+import Button from "./components/atoms/button/button.component";
+import Logo from "./components/atoms/logo/logo.component";
+import TextField from "./components/atoms/textfield/textfield.component";
 import { loginUser } from "./usecases/loginUser";
 import { loginUserWithBiometrics } from "./usecases/LoginUserWithBiometrics";
 
@@ -27,7 +27,7 @@ export default function Login() {
         padding: 24,
 
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
       }}
     >
       <Logo width={251.61} height={113.22} />
@@ -48,7 +48,7 @@ export default function Login() {
               placeholder="Username"
               value={value}
               onChangeText={onChange}
-              secureText={false}
+              secureTextEntry={false}
             />
           );
         }}
@@ -75,7 +75,7 @@ export default function Login() {
               placeholder="Password"
               value={value}
               onChangeText={onChange}
-              secureText={true}
+              secureTextEntry={true}
             />
           );
         }}
