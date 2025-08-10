@@ -19,6 +19,7 @@ export default function IconTextButton({buttonIconName,text, iconSize}:{
           paddingLeft: paddings.xxxSmallPadding,
           paddingRight: paddings.xxxSmallPadding,
           alignItems:'center'
+      
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>

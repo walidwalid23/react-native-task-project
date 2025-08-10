@@ -1,10 +1,10 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { ActivityIndicator, SafeAreaView, Text, View } from "react-native";
 import Button from "./components/atoms/button/button.component";
 import Logo from "./components/atoms/logo/logo.component";
-import TextField from "./components/atoms/textfield/textfield.component";
+import FormBuilder from "./components/organisms/formbuilder/formbuilder.component";
 import { loginUser } from "./usecases/loginUser";
 import { loginUserWithBiometrics } from "./usecases/LoginUserWithBiometrics";
 
@@ -19,75 +19,50 @@ export default function Login() {
 
   const router = useRouter();
 
+  const textFieldsData = [
+    {
+      name: "username",
+      placeholder: "Enter Username",
+      rules: {
+        required: "Username field is required",
+        minLength: {
+          value: 2,
+          message: "Username must be at least 2 characters.",
+        },
+      },
+    },
+    {
+      name: "password",
+      placeholder: "Enter Password",
+      secureTextEntry: true,
+      rules: {
+        required: "Password field is required",
+        minLength: {
+          value: 3,
+          message: "Password must be at least 3 characters.",
+        },
+      },
+    },
+  ];
+
   return (
     <SafeAreaView
       style={{
         flex: 1,
         backgroundColor: "#000000ff",
         padding: 24,
-
-        alignItems: "center",
-        justifyContent: "center",
+        flexDirection:'column',
+         justifyContent:'center'
+       
       }}
     >
       <Logo width={251.61} height={113.22} />
       <View style={{ height: 32 }} />
-      <Controller
+      <FormBuilder
+        fields={textFieldsData}
         control={control}
-        rules={{
-          required: "Username field is required",
-          minLength: {
-            value: 2,
-            message: "Username must be atleast 2 characters.",
-          },
-        }}
-        name="username"
-        render={({ field: { onChange, value } }) => {
-          return (
-            <TextField
-              placeholder="Username"
-              value={value}
-              onChangeText={onChange}
-              secureTextEntry={false}
-            />
-          );
-        }}
-      />
-
-      {typeof errors.username?.message === "string" ? (
-        <Text style={{ color: "red" }}>{errors.username.message}</Text>
-      ) : null}
-
-      <View style={{ height: 16 }} />
-      <Controller
-        control={control}
-        rules={{
-          required: "Password field is required",
-          minLength: {
-            value: 3,
-            message: "Password must be atleast 3 characters.",
-          },
-        }}
-        name="password"
-        render={({ field: { onChange, value } }) => {
-          return (
-            <TextField
-              placeholder="Password"
-              value={value}
-              onChangeText={onChange}
-              secureTextEntry={true}
-            />
-          );
-        }}
-      />
-      {typeof errors.password?.message === "string" ? (
-        <Text style={{ color: "red" }}>{errors.password.message}</Text>
-      ) : null}
-
-      <View style={{ height: 24 }} />
-      <Button
-        buttonText="Login"
-        onPress={handleSubmit((data) => {
+        errors={errors}
+        onSubmit={handleSubmit((data) => {
           loginUser(
             data.username,
             data.password,
@@ -97,6 +72,7 @@ export default function Login() {
           );
         })}
       />
+
       <View style={{ height: 24 }} />
       <Button
         buttonText="Login with biometric"
