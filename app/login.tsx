@@ -27,6 +27,7 @@ export default function Login() {
         padding: 24,
 
         alignItems: "center",
+        justifyContent: "center"
       }}
     >
       <Logo width={251.61} height={113.22} />
