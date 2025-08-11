@@ -1,13 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Router } from "expo-router";
-import { storeTokenWithBiometric } from "./token_store";
+import { storeToken, storeTokenWithBiometric } from "./token_store";
 
 export async function loginUser(
   username: string,
   password: string,
   setIsFailure: React.Dispatch<React.SetStateAction<boolean>>,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  router: Router
+  router: Router,
+  isBiometricAvailable: boolean
 ) {
   try {
     console.log("login user called");
@@ -32,8 +33,11 @@ export async function loginUser(
     const data = await response.json();
     // console.log("Response data:", data);
     const jwtToken = data.token;
-
-    await storeTokenWithBiometric(jwtToken);
+    if (isBiometricAvailable) {
+      await storeTokenWithBiometric(jwtToken);
+    } else {
+      await storeToken(jwtToken);
+    }
     // set loggedin flag to true
     await AsyncStorage.setItem("loggedIn", "true");
 

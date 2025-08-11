@@ -6,7 +6,7 @@ export async function storeToken(token: string) {
   try {
     const isTokenStored = await Keychain.setGenericPassword(TOKEN_KEY, token);
     if (isTokenStored) {
-      console.log("JWT saved successfully with biometric access control");
+      console.log("JWT saved successfully l");
     } else {
       console.log("Couldn't store the JWT");
     }
@@ -17,7 +17,6 @@ export async function storeToken(token: string) {
 
 export async function storeTokenWithBiometric(token: string) {
   try {
-    console.log("store token with biometrics called");
     const isTokenStored = await Keychain.setGenericPassword(TOKEN_KEY, token, {
       accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
       //securityLevel: Keychain.SECURITY_LEVEL.SECURE_HARDWARE,

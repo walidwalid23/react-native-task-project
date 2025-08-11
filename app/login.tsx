@@ -1,7 +1,8 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ActivityIndicator, SafeAreaView, Text, View } from "react-native";
+import * as Keychain from "react-native-keychain";
 import Button from "./components/atoms/button/button.component";
 import Logo from "./components/atoms/logo/logo.component";
 import FormBuilder from "./components/organisms/formbuilder/formbuilder.component";
@@ -44,6 +45,24 @@ export default function Login() {
       },
     },
   ];
+   const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
+
+  useEffect(() => {
+    const checkBiometric = async () => {
+      try {
+        const biometricAvailable = await Keychain.getSupportedBiometryType();
+        if(biometricAvailable){
+        setIsBiometricAvailable(true);
+        } 
+
+      } catch (error) {
+        console.error("Failed to check biometric availability:", error);
+        setIsBiometricAvailable(false); 
+      };
+    }
+       checkBiometric();
+  }
+    ,[]);
 
   return (
     <SafeAreaView
@@ -63,23 +82,29 @@ export default function Login() {
         control={control}
         errors={errors}
         onSubmit={handleSubmit((data) => {
+          console.log("submit called");
           loginUser(
             data.username,
             data.password,
             setIsFailure,
             setIsLoading,
-            router
+            router,
+            isBiometricAvailable
           );
         })}
       />
 
       <View style={{ height: 24 }} />
-      <Button
+      {
+        
+        (isBiometricAvailable)? <Button
         buttonText="Login with biometric"
         onPress={() => {
           loginUserWithBiometrics(setIsFailure, setIsLoading, router);
         }}
-      />
+      />:null
+      }
+     
 
       {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
       {isFailure ? (
