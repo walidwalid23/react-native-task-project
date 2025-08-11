@@ -2,7 +2,6 @@ import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import {
@@ -14,20 +13,25 @@ import {
   View,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "./components/Card";
 import Favourite from "./components/Favourite";
 import Goal from "./components/Goal";
 import IconTextButton from "./components/IconTextButton";
 import SectionHeader from "./components/SectionHeader";
 import Wallet from "./components/Wallet";
+import { logout } from "./store/authSlice";
+import { AppDispatch, RootState } from "./store/store";
 import { colors, fontSizes, margins, paddings, sizes } from "./styles";
 
 export default function Home() {
   const router = useRouter();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const checkLoggedState = async () => {
-      const isLoggedIn = await AsyncStorage.getItem("loggedIn");
+      //const isLoggedIn = await AsyncStorage.getItem("loggedIn");
 
       if (!isLoggedIn) {
         router.replace("/login");
@@ -106,7 +110,8 @@ export default function Home() {
                   justifyContent: "center",
                 }}
                 onPress={async () => {
-                  await AsyncStorage.removeItem("loggedIn");
+                  //await AsyncStorage.removeItem("loggedIn");
+                  dispatch(logout());
                   router.replace("/login");
                   console.log("logged out");
                 }}

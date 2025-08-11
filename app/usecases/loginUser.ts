@@ -1,5 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Router } from "expo-router";
+import { login } from "./../store/authSlice";
+import { AppDispatch } from "./../store/store";
 import { storeToken, storeTokenWithBiometric } from "./token_store";
 
 export async function loginUser(
@@ -8,7 +9,8 @@ export async function loginUser(
   setIsFailure: React.Dispatch<React.SetStateAction<boolean>>,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   router: Router,
-  isBiometricAvailable: boolean
+  isBiometricAvailable: boolean,
+  dispatch: AppDispatch
 ) {
   try {
     console.log("login user called");
@@ -39,7 +41,8 @@ export async function loginUser(
       await storeToken(jwtToken);
     }
     // set loggedin flag to true
-    await AsyncStorage.setItem("loggedIn", "true");
+    //await AsyncStorage.setItem("loggedIn", "true");
+    dispatch(login());
 
     // redirect to homepage
     router.replace("/home");

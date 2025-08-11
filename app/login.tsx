@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ActivityIndicator, SafeAreaView, Text, View } from "react-native";
 import * as Keychain from "react-native-keychain";
+import { useDispatch } from "react-redux";
 import Button from "./components/atoms/button/button.component";
 import Logo from "./components/atoms/logo/logo.component";
 import FormBuilder from "./components/organisms/formbuilder/formbuilder.component";
+import { AppDispatch } from "./store/store";
 import { loginUser } from "./usecases/loginUser";
 import { loginUserWithBiometrics } from "./usecases/LoginUserWithBiometrics";
 
@@ -45,24 +47,23 @@ export default function Login() {
       },
     },
   ];
-   const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
+  const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const checkBiometric = async () => {
       try {
         const biometricAvailable = await Keychain.getSupportedBiometryType();
-        if(biometricAvailable){
-        setIsBiometricAvailable(true);
-        } 
-
+        if (biometricAvailable) {
+          setIsBiometricAvailable(true);
+        }
       } catch (error) {
         console.error("Failed to check biometric availability:", error);
-        setIsBiometricAvailable(false); 
-      };
-    }
-       checkBiometric();
-  }
-    ,[]);
+        setIsBiometricAvailable(false);
+      }
+    };
+    checkBiometric();
+  }, []);
 
   return (
     <SafeAreaView
@@ -70,9 +71,8 @@ export default function Login() {
         flex: 1,
         backgroundColor: "#000000ff",
         padding: 24,
-        flexDirection:'column',
-         justifyContent:'center'
-       
+        flexDirection: "column",
+        justifyContent: "center",
       }}
     >
       <Logo width={251.61} height={113.22} />
@@ -89,22 +89,26 @@ export default function Login() {
             setIsFailure,
             setIsLoading,
             router,
-            isBiometricAvailable
+            isBiometricAvailable,
+            dispatch
           );
         })}
       />
 
       <View style={{ height: 24 }} />
-      {
-        
-        (isBiometricAvailable)? <Button
-        buttonText="Login with biometric"
-        onPress={() => {
-          loginUserWithBiometrics(setIsFailure, setIsLoading, router);
-        }}
-      />:null
-      }
-     
+      {isBiometricAvailable ? (
+        <Button
+          buttonText="Login with biometric"
+          onPress={() => {
+            loginUserWithBiometrics(
+              setIsFailure,
+              setIsLoading,
+              router,
+              dispatch
+            );
+          }}
+        />
+      ) : null}
 
       {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
       {isFailure ? (
