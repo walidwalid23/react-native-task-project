@@ -6,8 +6,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     width: '100%',
     color: 'white',
-    paddingHorizontal: 12, 
-    paddingVertical: 10,  
+  
 
   },
 });

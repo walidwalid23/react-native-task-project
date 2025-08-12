@@ -1,10 +1,12 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { ActivityIndicator, SafeAreaView, Text, View } from "react-native";
+import { ActivityIndicator, KeyboardTypeOptions, Text, View } from "react-native";
 import * as Keychain from "react-native-keychain";
+import { TextInput } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import Button from "./components/atoms/button/button.component";
+import DropdownModal from "./components/atoms/drop-down-modal/drop-down-modal.component";
 import Logo from "./components/atoms/logo/logo.component";
 import FormBuilder from "./components/organisms/formbuilder/formbuilder.component";
 import { AppDispatch } from "./store/store";
@@ -26,6 +28,7 @@ export default function Login() {
     {
       name: "username",
       placeholder: "Enter Username",
+      leading: <TextInput.Icon icon="account" color="white"/>,
       rules: {
         required: "Username field is required",
         minLength: {
@@ -38,11 +41,25 @@ export default function Login() {
       name: "password",
       placeholder: "Enter Password",
       secureTextEntry: true,
+      leading: <TextInput.Icon icon="lock" color="white"/>,
+      trailing: <TextInput.Icon icon="eye-off" color="white"/>,
       rules: {
         required: "Password field is required",
         minLength: {
           value: 3,
           message: "Password must be at least 3 characters.",
+        },
+      },
+    },
+    {
+      name: "number",
+      placeholder: "Enter Number",
+      keyboardType:'numeric' as KeyboardTypeOptions,
+      rules: {
+        required: "Number field is required",
+        pattern: {
+          value: /^\d*$/, // Only numeric input
+          message: "Only numbers are allowed",
         },
       },
     },
@@ -66,7 +83,7 @@ export default function Login() {
   }, []);
 
   return (
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
         backgroundColor: "#000000ff",
@@ -95,6 +112,8 @@ export default function Login() {
         })}
       />
 
+      <DropdownModal />
+
       <View style={{ height: 24 }} />
       {isBiometricAvailable ? (
         <Button
@@ -116,6 +135,6 @@ export default function Login() {
           Login Failed
         </Text>
       ) : null}
-    </SafeAreaView>
+    </View>
   );
 }

@@ -25,6 +25,13 @@ export default function FormBuilder({
                 value={value}
                 onChangeText={onChange}
                 secureTextEntry={field.secureTextEntry}
+                keyboardType={field.keyboardType}
+                left = {field.leading}
+                right= {field.trailing}
+                
+               
+                
+              
               />
             )}
           />
