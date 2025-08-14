@@ -1,27 +1,9 @@
-import { StyleSheet } from 'react-native';
+import { FieldErrors, FieldValues } from "react-hook-form";
+import { FormField } from "../../organisms/formbuilder/formbuilder.type";
 
-export const styles = StyleSheet.create({
-    container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  button: {
-    padding: 16,
-    backgroundColor: '#4a90e2',
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  sheetContent: {
-    flex: 1, backgroundColor: 'white', padding: 20 
-  },
-  option: {
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-  },
-});
+export interface DropDownModalSheetType {
+  field: FormField;
+  onChange: (value: string) => void;
+  value: any;
+  errors: FieldErrors<FieldValues>;
+}

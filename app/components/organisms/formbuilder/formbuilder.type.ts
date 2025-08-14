@@ -1,20 +1,21 @@
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import { KeyboardTypeOptions } from "react-native";
 
-interface FormField {
+export interface FormField {
   name: string;
   placeholder: string;
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
-  leading?: React.ReactNode,
-  trailing?: React.ReactNode
+  leading?: React.ReactElement,
+  trailing?: React.ReactElement
   rules: object;
+  isDisabled?: boolean,
+  fieldType: string
+
 }
 
 export interface FormBuilderProps {
   fields: FormField[];
-  onSubmit: () => void;
-  control: UseFormReturn["control"];
-  errors: any;
+  onSubmit: (data: FieldValues) => void;
 }

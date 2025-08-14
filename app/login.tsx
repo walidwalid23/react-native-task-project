@@ -1,14 +1,21 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { ActivityIndicator, KeyboardTypeOptions, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  KeyboardTypeOptions,
+  Text,
+  View,
+} from "react-native";
 import * as Keychain from "react-native-keychain";
 import { TextInput } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import Button from "./components/atoms/button/button.component";
-import DropdownModal from "./components/atoms/drop-down-modal/drop-down-modal.component";
 import Logo from "./components/atoms/logo/logo.component";
 import FormBuilder from "./components/organisms/formbuilder/formbuilder.component";
+import { FormField } from "./components/organisms/formbuilder/formbuilder.type";
+import { COLORS } from "./constants/colors";
+import { SIZES } from "./constants/sizes";
+import { SPACING } from "./constants/spacing";
 import { AppDispatch } from "./store/store";
 import { loginUser } from "./usecases/loginUser";
 import { loginUserWithBiometrics } from "./usecases/LoginUserWithBiometrics";
@@ -16,19 +23,22 @@ import { loginUserWithBiometrics } from "./usecases/LoginUserWithBiometrics";
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [isFailure, setIsFailure] = useState(false);
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
-  const textFieldsData = [
+  const textFieldsData: FormField[] = [
     {
+      fieldType: "text",
       name: "username",
       placeholder: "Enter Username",
-      leading: <TextInput.Icon icon="account" color="white"/>,
+      leading: (
+        <TextInput.Icon
+          icon="account"
+          color={COLORS.neutral[400]}
+          size={SIZES.icon.md}
+        />
+      ),
       rules: {
         required: "Username field is required",
         minLength: {
@@ -38,11 +48,25 @@ export default function Login() {
       },
     },
     {
+      fieldType: "text",
       name: "password",
       placeholder: "Enter Password",
-      secureTextEntry: true,
-      leading: <TextInput.Icon icon="lock" color="white"/>,
-      trailing: <TextInput.Icon icon="eye-off" color="white"/>,
+      secureTextEntry: showPassword ? false : true,
+      leading: (
+        <TextInput.Icon
+          icon="lock"
+          color={COLORS.neutral[400]}
+          size={SIZES.icon.md}
+        />
+      ),
+      trailing: (
+        <TextInput.Icon
+          icon={showPassword ? "eye-off" : "eye"}
+          color={COLORS.neutral[400]}
+          size={SIZES.icon.md}
+          onPress={() => setShowPassword(!showPassword)}
+        />
+      ),
       rules: {
         required: "Password field is required",
         minLength: {
@@ -52,15 +76,24 @@ export default function Login() {
       },
     },
     {
+      fieldType: "text",
       name: "number",
       placeholder: "Enter Number",
-      keyboardType:'numeric' as KeyboardTypeOptions,
+      keyboardType: "numeric" as KeyboardTypeOptions,
       rules: {
         required: "Number field is required",
         pattern: {
           value: /^\d*$/, // Only numeric input
           message: "Only numbers are allowed",
         },
+      },
+    },
+    {
+      fieldType: "dropdown",
+      name: "options",
+      placeholder: "Select option",
+      rules: {
+        required: "Please select an option",
       },
     },
   ];
@@ -86,20 +119,17 @@ export default function Login() {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#000000ff",
-        padding: 24,
+        backgroundColor: COLORS.neutral[100],
+        padding: SPACING.lg,
         flexDirection: "column",
         justifyContent: "center",
       }}
     >
       <Logo width={251.61} height={113.22} />
-      <View style={{ height: 32 }} />
+      <View style={{ height: SPACING.xl }} />
       <FormBuilder
         fields={textFieldsData}
-        control={control}
-        errors={errors}
-        onSubmit={handleSubmit((data) => {
-          console.log("submit called");
+        onSubmit={(data) => {
           loginUser(
             data.username,
             data.password,
@@ -109,11 +139,8 @@ export default function Login() {
             isBiometricAvailable,
             dispatch
           );
-        })}
+        }}
       />
-
-      <DropdownModal />
-
       <View style={{ height: 24 }} />
       {isBiometricAvailable ? (
         <Button

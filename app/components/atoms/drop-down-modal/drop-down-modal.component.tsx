@@ -1,34 +1,58 @@
+import { COLORS } from "@/app/constants/colors";
+import { SIZES } from "@/app/constants/sizes";
 import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
-import React, { useMemo, useRef, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { styles } from "./drop-down-modal.type";
-
-export default function DropdownModal() {
+import React, { useMemo, useRef } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { TextInput } from "react-native-paper";
+import BaseTextInput from "../../molecules/base-text-input/base-text-input.component";
+import { styles } from "./drop-down-modal.style";
+import { DropDownModalSheetType } from "./drop-down-modal.type";
+export default function DropDownModalSheet({
+  field,
+  onChange,
+  value,
+  errors,
+}: DropDownModalSheetType) {
   const modalRef = useRef<BottomSheetModalMethods>(null);
   const snapPoints = useMemo(() => ["25%"], []);
 
-  const [selected, setSelected] = useState("Select Option");
-
-  const openModal = () => {
+  const openDropDownModal = () => {
     modalRef.current?.present();
   };
 
-  const selectOption = (option: React.SetStateAction<string>) => {
-    setSelected(option);
+  const selectOption = (option: string) => {
+    onChange(option);
     modalRef.current?.dismiss();
   };
 
+  const options = ["Option 1", "Option 2", "Option 3"];
+
   return (
-    <View style={styles.container}>
+    <View>
       <TouchableOpacity
-        style={styles.button}
         onPress={() => {
-          console.log("clicked");
-          openModal();
+          console.log("Input pressed!");
+          openDropDownModal();
         }}
       >
-        <Text style={styles.buttonText}>{selected}</Text>
+        <BaseTextInput
+          isError={errors[field.name] ? true : false}
+          placeholder={field.placeholder}
+          value={value}
+          secureTextEntry={field.secureTextEntry}
+          keyboardType={field.keyboardType}
+          right={
+            <TextInput.Icon
+              icon="arrow-down"
+              size={SIZES.icon.md}
+              color={COLORS.neutral[400]}
+              onPress={openDropDownModal}
+            />
+          }
+          editable={false}
+          isFocused={false}
+        />
       </TouchableOpacity>
 
       <BottomSheetModal
@@ -39,18 +63,21 @@ export default function DropdownModal() {
       >
         {/*  You must use BottomSheetView instead of view*/}
         <BottomSheetView style={styles.sheetContent}>
-          {["Option 1", "Option 2", "Option 3"].map((option) => (
-            <TouchableOpacity
-              key={option}
-              style={styles.option}
-              onPress={() => {
-                console.log("selecting option");
-                selectOption(option);
-              }}
-            >
-              <Text>{option}</Text>
-            </TouchableOpacity>
-          ))}
+          <FlatList
+            data={options}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.option}
+                onPress={() => {
+                  console.log("selecting option");
+                  selectOption(item);
+                }}
+              >
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            )}
+          />
         </BottomSheetView>
       </BottomSheetModal>
     </View>

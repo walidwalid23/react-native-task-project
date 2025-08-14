@@ -1,0 +1,25 @@
+export const COLORS = {
+  primary: {
+    50:  '#FEF4EF',
+    100: '#FCEADF',
+    200: '#FBDFCF',
+    300: '#FAD5BF',
+    400: '#F7BF9E',
+    500: '#F5AA7E',
+    600: '#F2955E',
+    700: '#D27138',
+    800: '#C97A4C',
+    900: '#A0603A',
+  },
+  success: '#288537',
+  error: '#AA1E1E',
+  warning: '#FFCC00',
+  neutral: {
+    50:  '#FCFCFC',
+    100: '#F7F7F7',
+    200: '#959595',
+    300: '#C6C4C4',
+    400: '#575353',
+    500: '#040404',
+  },
+};

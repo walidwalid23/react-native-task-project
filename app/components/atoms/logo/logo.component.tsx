@@ -6,7 +6,7 @@ export default function Logo({width, height, ...props}:LogoProps){
 
     return (  <Image
         {...props}
-        source={require("../../../../assets/images/appbar_logo.png")}
+        source={require("../../../../assets/images/logo-black.png")}
         style={[styles.logo,{ width, height }]}
       />);
 }
