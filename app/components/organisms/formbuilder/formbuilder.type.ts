@@ -1,3 +1,4 @@
+import { FieldType } from "@/app/enums";
 import React from "react";
 import { FieldValues } from "react-hook-form";
 import { KeyboardTypeOptions } from "react-native";
@@ -11,7 +12,7 @@ export interface FormField {
   trailing?: React.ReactElement
   rules: object;
   isDisabled?: boolean,
-  fieldType: string
+  fieldType: FieldType
 
 }
 

@@ -1,9 +1,9 @@
-import { COLORS } from "@/app/constants/colors";
-import { SIZES } from "@/app/constants/sizes";
+import { COLORS } from "@/app/constants/colors.constant";
+import { SIZES } from "@/app/constants/sizes.constant";
 import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
-import React, { useMemo, useRef } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import React, { useMemo, useRef, useState } from "react";
+import { FlatList, Keyboard, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import BaseTextInput from "../../molecules/base-text-input/base-text-input.component";
 import { styles } from "./drop-down-modal.style";
@@ -20,20 +20,28 @@ export default function DropDownModalSheet({
   const openDropDownModal = () => {
     modalRef.current?.present();
   };
+  const closeDropDownModal = () => {
+    if (modalRef.current) {
+      modalRef.current.dismiss();
+      setIsFocused(false);
+    }
+  };
 
   const selectOption = (option: string) => {
     onChange(option);
-    modalRef.current?.dismiss();
+    closeDropDownModal();
   };
 
   const options = ["Option 1", "Option 2", "Option 3"];
-
+  const [isFocused, setIsFocused] = useState(false);
   return (
     <View>
       <TouchableOpacity
         onPress={() => {
           console.log("Input pressed!");
           openDropDownModal();
+          Keyboard.dismiss();
+          setIsFocused(true);
         }}
       >
         <BaseTextInput
@@ -51,7 +59,7 @@ export default function DropDownModalSheet({
             />
           }
           editable={false}
-          isFocused={false}
+          isFocused={isFocused}
         />
       </TouchableOpacity>
 

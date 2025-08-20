@@ -1,5 +1,5 @@
-import { COLORS } from "@/app/constants/colors";
-import { SIZES } from "@/app/constants/sizes";
+import { COLORS } from "@/app/constants/colors.constant";
+import { SIZES } from "@/app/constants/sizes.constant";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({

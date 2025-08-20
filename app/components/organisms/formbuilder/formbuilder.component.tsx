@@ -3,9 +3,12 @@ import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import Button from "../../atoms/button/button.component";
 
-import { SPACING } from "@/app/constants/spacing";
+import { SPACING } from "@/app/constants/spacing.constant";
+import { ButtonType, FieldType } from "@/app/enums";
 import DropDownModalSheet from "../../atoms/drop-down-modal/drop-down-modal.component";
-import BaseTextInput from "../../molecules/base-text-input/base-text-input.component";
+import NumberField from "../../atoms/number-field/number-field.component";
+import PasswordField from "../../atoms/password-field/password-field.component";
+import TextField from "../../atoms/text-field/text-field.component";
 import { FormBuilderProps } from "./formbuilder.type";
 
 export default function FormBuilder({ fields, onSubmit }: FormBuilderProps) {
@@ -28,9 +31,9 @@ export default function FormBuilder({ fields, onSubmit }: FormBuilderProps) {
             rules={field.rules}
             render={({ field: { onChange, value } }) => {
               switch (field.fieldType) {
-                case "text":
+                case FieldType.Text:
                   return (
-                    <BaseTextInput
+                    <TextField
                       isFocused={focusedFieldIndex === currentIndex}
                       isError={errors[field.name] ? true : false}
                       onFocus={() => setFocusedFieldIndex(currentIndex)}
@@ -38,34 +41,50 @@ export default function FormBuilder({ fields, onSubmit }: FormBuilderProps) {
                       placeholder={field.placeholder}
                       value={value}
                       onChangeText={onChange}
-                      secureTextEntry={field.secureTextEntry}
-                      keyboardType={field.keyboardType}
                       left={field.leading}
-                      right={field.trailing}
-                      disabled={field.isDisabled}
                     />
                   );
-                case "dropdown":
+                case FieldType.Password:
                   return (
-                  <DropDownModalSheet errors={errors} field={field} onChange={onChange} value={value} />
+                    <PasswordField
+                      secureTextEntry={field.secureTextEntry}
+                      isFocused={focusedFieldIndex === currentIndex}
+                      isError={errors[field.name] ? true : false}
+                      onFocus={() => setFocusedFieldIndex(currentIndex)}
+                      onBlur={() => setFocusedFieldIndex(null)}
+                      placeholder={field.placeholder}
+                      value={value}
+                      onChangeText={onChange}
+                      left={field.leading}
+                      right={field.trailing}
+                    />
+                  );
+                  case FieldType.Number:
+                  return (
+                    <NumberField
+                      secureTextEntry={field.secureTextEntry}
+                      isFocused={focusedFieldIndex === currentIndex}
+                      isError={errors[field.name] ? true : false}
+                      onFocus={() => setFocusedFieldIndex(currentIndex)}
+                      onBlur={() => setFocusedFieldIndex(null)}
+                      placeholder={field.placeholder}
+                      value={value}
+                      onChangeText={onChange}
+                      left={field.leading}
+                      right={field.trailing}
+                    />
+                  );
+                case FieldType.Dropdown:
+                  return (
+                    <DropDownModalSheet
+                      errors={errors}
+                      field={field}
+                      onChange={onChange}
+                      value={value}
+                    />
                   );
                 default:
-                  return (
-                    <BaseTextInput
-                      isFocused={focusedFieldIndex === currentIndex}
-                      isError={errors[field.name] ? true : false}
-                      onFocus={() => setFocusedFieldIndex(currentIndex)}
-                      onBlur={() => setFocusedFieldIndex(null)}
-                      placeholder={field.placeholder}
-                      value={value}
-                      onChangeText={onChange}
-                      secureTextEntry={field.secureTextEntry}
-                      keyboardType={field.keyboardType}
-                      left={field.leading}
-                      right={field.trailing}
-                      disabled={field.isDisabled}
-                    />
-                  );
+                  return <View />;
               }
             }}
           />
@@ -79,8 +98,10 @@ export default function FormBuilder({ fields, onSubmit }: FormBuilderProps) {
       <View style={{ height: SPACING.md }} />
       <Button
         buttonText="Submit"
+        buttonType= {ButtonType.Primary}
         onPress={handleSubmit((data) => {
-          console.log("submit called");
+          //console.log("submit called:");
+          //console.log(data);
           onSubmit(data);
         })}
       />

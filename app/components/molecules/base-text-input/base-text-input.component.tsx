@@ -1,17 +1,12 @@
-import { COLORS } from "@/app/constants/colors";
+import { COLORS } from "@/app/constants/colors.constant";
 import { TextInput } from "react-native-paper";
 import { styles } from "./base-text-input.style";
 import { BaseTextInputProps } from "./base-text-input.type";
 
-export default function BaseTextInput({
-  isFocused,
-  isError,
- 
-  ...props
-}: BaseTextInputProps) {
+export default function BaseTextInput({ ...props }: BaseTextInputProps) {
   const getInputStyle = () => {
-    if (isError) return [styles.baseTextInput, styles.error];
-    if (isFocused) return [styles.baseTextInput, styles.focused];
+    if (props.isError) return [styles.baseTextInput, styles.error];
+    if (props.isFocused) return [styles.baseTextInput, styles.focused];
     return styles.baseTextInput;
   };
 
@@ -26,11 +21,6 @@ export default function BaseTextInput({
           primary: COLORS.primary[500],
         },
       }}
-      right={
-       
-          props.right
-        
-      }
     />
   );
 }

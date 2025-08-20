@@ -2,20 +2,22 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  KeyboardTypeOptions,
   Text,
-  View,
+  View
 } from "react-native";
 import * as Keychain from "react-native-keychain";
 import { TextInput } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import Button from "./components/atoms/button/button.component";
+import Icon from "./components/atoms/Icon/icon.component";
 import Logo from "./components/atoms/logo/logo.component";
 import FormBuilder from "./components/organisms/formbuilder/formbuilder.component";
 import { FormField } from "./components/organisms/formbuilder/formbuilder.type";
-import { COLORS } from "./constants/colors";
-import { SIZES } from "./constants/sizes";
-import { SPACING } from "./constants/spacing";
+import { COLORS } from "./constants/colors.constant";
+import { SIZES } from "./constants/sizes.constant";
+import { SPACING } from "./constants/spacing.constant";
+import { TYPOGRAPHY } from "./constants/typography.constant";
+import { ButtonType, FieldType } from "./enums";
 import { AppDispatch } from "./store/store";
 import { loginUser } from "./usecases/loginUser";
 import { loginUserWithBiometrics } from "./usecases/LoginUserWithBiometrics";
@@ -29,15 +31,11 @@ export default function Login() {
 
   const textFieldsData: FormField[] = [
     {
-      fieldType: "text",
+      fieldType: FieldType.Text,
       name: "username",
       placeholder: "Enter Username",
       leading: (
-        <TextInput.Icon
-          icon="account"
-          color={COLORS.neutral[400]}
-          size={SIZES.icon.md}
-        />
+       <TextInput.Icon icon={()=> <Icon name="chrome" color={COLORS.neutral[400]} size={SIZES.icon.md} />} />
       ),
       rules: {
         required: "Username field is required",
@@ -48,7 +46,7 @@ export default function Login() {
       },
     },
     {
-      fieldType: "text",
+      fieldType: FieldType.Password,
       name: "password",
       placeholder: "Enter Password",
       secureTextEntry: showPassword ? false : true,
@@ -76,10 +74,9 @@ export default function Login() {
       },
     },
     {
-      fieldType: "text",
+      fieldType: FieldType.Number,
       name: "number",
       placeholder: "Enter Number",
-      keyboardType: "numeric" as KeyboardTypeOptions,
       rules: {
         required: "Number field is required",
         pattern: {
@@ -89,7 +86,7 @@ export default function Login() {
       },
     },
     {
-      fieldType: "dropdown",
+      fieldType: FieldType.Dropdown,
       name: "options",
       placeholder: "Select option",
       rules: {
@@ -141,10 +138,11 @@ export default function Login() {
           );
         }}
       />
-      <View style={{ height: 24 }} />
+      <View style={{ height: SPACING.md }} />
       {isBiometricAvailable ? (
         <Button
           buttonText="Login with biometric"
+          buttonType={ButtonType.Secondary}
           onPress={() => {
             loginUserWithBiometrics(
               setIsFailure,
@@ -156,9 +154,17 @@ export default function Login() {
         />
       ) : null}
 
-      {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
+      {isLoading ? (
+        <ActivityIndicator size={SIZES.icon.lg} color={COLORS.primary[500]} />
+      ) : null}
       {isFailure ? (
-        <Text style={{ fontSize: 24, fontWeight: "bold", color: "red" }}>
+        <Text
+          style={{
+            fontSize: TYPOGRAPHY.fontSizes.body,
+            fontWeight: TYPOGRAPHY.fontWeights.medium,
+            color: COLORS.error,
+          }}
+        >
           Login Failed
         </Text>
       ) : null}
