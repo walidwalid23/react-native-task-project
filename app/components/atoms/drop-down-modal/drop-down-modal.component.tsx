@@ -6,6 +6,7 @@ import React, { useMemo, useRef, useState } from "react";
 import { FlatList, Keyboard, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import BaseTextInput from "../../molecules/base-text-input/base-text-input.component";
+import Icon from "../Icon/icon.component";
 import { styles } from "./drop-down-modal.style";
 import { DropDownModalSheetType } from "./drop-down-modal.type";
 export default function DropDownModalSheet({
@@ -52,9 +53,13 @@ export default function DropDownModalSheet({
           keyboardType={field.keyboardType}
           right={
             <TextInput.Icon
-              icon="arrow-down"
-              size={SIZES.icon.md}
-              color={COLORS.neutral[400]}
+              icon={() => (
+                          <Icon
+                            name="arrow-down2"
+                            color={COLORS.neutral[400]}
+                            size={SIZES.icon.md}
+                          />
+                        )}
               onPress={openDropDownModal}
             />
           }

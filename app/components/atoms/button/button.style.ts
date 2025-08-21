@@ -4,34 +4,42 @@ import { TYPOGRAPHY } from "@/app/constants/typography.constant";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  primary: {
+  button: {
     borderRadius: SIZES.radius.full,
-    backgroundColor: COLORS.primary[500],
-    width: "100%",
-    height: 40,
+    height: 48,
     alignItems: "center",
     justifyContent: "center",
+  },
+  primary: {
+    backgroundColor: COLORS.primary[500],
   },
   secondary: {
-    borderRadius: SIZES.radius.full,
-    borderColor: COLORS.neutral[500],
     borderWidth: 1,
-    width: "100%",
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    borderColor: COLORS.neutral[500],
   },
-  tertiary: {
-    width: "100%",
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
+  tertiary: {},
+  success: {
+    backgroundColor: COLORS.success,
+  },
+  error: {
+    backgroundColor: COLORS.error,
+  },
+  warning: {
+    backgroundColor: COLORS.warning,
+  },
+  disabled: {
+    backgroundColor: COLORS.neutral[200],
   },
   buttonText: {
     color: COLORS.neutral[500], // You can adjust the text color here
+    fontWeight: TYPOGRAPHY.fontWeights.bold,
   },
-  tertiaryButtonText:{
+  tertiaryButtonText: {
     color: COLORS.primary[500],
-    fontWeight: TYPOGRAPHY.fontWeights.bold
+    fontWeight: TYPOGRAPHY.fontWeights.bold,
+  },
+  lightButtonText:{
+    color: COLORS.neutral[50],
+    fontWeight: TYPOGRAPHY.fontWeights.bold,
   }
 });

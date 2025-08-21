@@ -1,5 +1,5 @@
 import Icomoon from "react-native-icomoon";
-import json from './../../../../assets/icons/icomoon-icons.json';
+import json from './../../../../assets/icons/selection.json';
 import { IconProps } from './icon.type';
 
 

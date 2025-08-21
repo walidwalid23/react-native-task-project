@@ -14,9 +14,6 @@ export type PasswordFieldProps = Omit<
   | "secureTextEntry"
 > & {
   // Make these specific properties required
-  secureTextEntry: BaseTextInputProps["secureTextEntry"]
-  left: BaseTextInputProps["left"];
-  right: BaseTextInputProps["right"];
   placeholder: BaseTextInputProps["placeholder"];
   isFocused: BaseTextInputProps["isFocused"];
   isError: BaseTextInputProps["isError"];

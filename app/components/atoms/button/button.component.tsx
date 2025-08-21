@@ -1,4 +1,4 @@
-import { ButtonType } from "@/app/enums";
+import { ButtonState, ButtonType } from "@/app/enums";
 import { Text, TouchableOpacity } from "react-native";
 import { styles } from "./button.style";
 import { ButtonProps } from "./button.type";
@@ -6,23 +6,26 @@ import { ButtonProps } from "./button.type";
 export default function Button({
   buttonText,
   buttonType,
+  buttonState,
   ...props
 }: ButtonProps) {
   return (
     <TouchableOpacity
       {...props}
-      style={
-        buttonType === ButtonType.Primary
-          ? styles.primary
-          : buttonType === ButtonType.Secondary
-          ? styles.secondary
-          : styles.tertiary
-      }
+      style={[
+        styles.button,
+        buttonState === ButtonState.Default
+          ? styles[buttonType]
+          : styles[buttonState],
+      ]}
     >
       <Text
         style={
           buttonType === ButtonType.Tertiary
             ? styles.tertiaryButtonText
+            : buttonState === ButtonState.Error ||
+              buttonState === ButtonState.Success
+            ? styles.lightButtonText
             : styles.buttonText
         }
       >

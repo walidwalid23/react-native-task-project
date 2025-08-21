@@ -1,10 +1,6 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Text,
-  View
-} from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import * as Keychain from "react-native-keychain";
 import { TextInput } from "react-native-paper";
 import { useDispatch } from "react-redux";
@@ -17,7 +13,7 @@ import { COLORS } from "./constants/colors.constant";
 import { SIZES } from "./constants/sizes.constant";
 import { SPACING } from "./constants/spacing.constant";
 import { TYPOGRAPHY } from "./constants/typography.constant";
-import { ButtonType, FieldType } from "./enums";
+import { ButtonState, ButtonType, FieldType } from "./enums";
 import { AppDispatch } from "./store/store";
 import { loginUser } from "./usecases/loginUser";
 import { loginUserWithBiometrics } from "./usecases/LoginUserWithBiometrics";
@@ -25,7 +21,7 @@ import { loginUserWithBiometrics } from "./usecases/LoginUserWithBiometrics";
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [isFailure, setIsFailure] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  
 
   const router = useRouter();
 
@@ -35,7 +31,15 @@ export default function Login() {
       name: "username",
       placeholder: "Enter Username",
       leading: (
-       <TextInput.Icon icon={()=> <Icon name="chrome" color={COLORS.neutral[400]} size={SIZES.icon.md} />} />
+        <TextInput.Icon
+          icon={() => (
+            <Icon
+              name="user"
+              color={COLORS.neutral[400]}
+              size={SIZES.icon.md}
+            />
+          )}
+        />
       ),
       rules: {
         required: "Username field is required",
@@ -49,22 +53,6 @@ export default function Login() {
       fieldType: FieldType.Password,
       name: "password",
       placeholder: "Enter Password",
-      secureTextEntry: showPassword ? false : true,
-      leading: (
-        <TextInput.Icon
-          icon="lock"
-          color={COLORS.neutral[400]}
-          size={SIZES.icon.md}
-        />
-      ),
-      trailing: (
-        <TextInput.Icon
-          icon={showPassword ? "eye-off" : "eye"}
-          color={COLORS.neutral[400]}
-          size={SIZES.icon.md}
-          onPress={() => setShowPassword(!showPassword)}
-        />
-      ),
       rules: {
         required: "Password field is required",
         minLength: {
@@ -143,6 +131,7 @@ export default function Login() {
         <Button
           buttonText="Login with biometric"
           buttonType={ButtonType.Secondary}
+          buttonState={ButtonState.Default}
           onPress={() => {
             loginUserWithBiometrics(
               setIsFailure,

@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 import Button from "../../atoms/button/button.component";
 
 import { SPACING } from "@/app/constants/spacing.constant";
-import { ButtonType, FieldType } from "@/app/enums";
+import { ButtonState, ButtonType, FieldType } from "@/app/enums";
 import DropDownModalSheet from "../../atoms/drop-down-modal/drop-down-modal.component";
 import NumberField from "../../atoms/number-field/number-field.component";
 import PasswordField from "../../atoms/password-field/password-field.component";
@@ -47,7 +47,6 @@ export default function FormBuilder({ fields, onSubmit }: FormBuilderProps) {
                 case FieldType.Password:
                   return (
                     <PasswordField
-                      secureTextEntry={field.secureTextEntry}
                       isFocused={focusedFieldIndex === currentIndex}
                       isError={errors[field.name] ? true : false}
                       onFocus={() => setFocusedFieldIndex(currentIndex)}
@@ -55,11 +54,9 @@ export default function FormBuilder({ fields, onSubmit }: FormBuilderProps) {
                       placeholder={field.placeholder}
                       value={value}
                       onChangeText={onChange}
-                      left={field.leading}
-                      right={field.trailing}
                     />
                   );
-                  case FieldType.Number:
+                case FieldType.Number:
                   return (
                     <NumberField
                       secureTextEntry={field.secureTextEntry}
@@ -98,7 +95,8 @@ export default function FormBuilder({ fields, onSubmit }: FormBuilderProps) {
       <View style={{ height: SPACING.md }} />
       <Button
         buttonText="Submit"
-        buttonType= {ButtonType.Primary}
+        buttonType={ButtonType.Primary}
+        buttonState={ButtonState.Default}
         onPress={handleSubmit((data) => {
           //console.log("submit called:");
           //console.log(data);

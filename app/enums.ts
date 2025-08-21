@@ -11,3 +11,10 @@ export enum ButtonType {
   Tertiary = 'tertiary',
 }
 
+export enum ButtonState {
+  Default = 'default',
+  Success = 'success',
+  Error = 'error',
+  Warning = 'warning',
+  Disabled = 'disabled'
+}
